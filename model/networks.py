@@ -102,7 +102,7 @@ def define_G(opt):
     #     dropout=model_opt['unet']['dropout'],
     #     image_size=model_opt['diffusion']['image_size']
     # )
-    model=  UMaskedAutoencoderViT(
+    model=  unet.UMaskedAutoencoderViT(
             img_size=model_opt['umae']['img_size'],
             patch_size=model_opt['umae']['patch_size'],
             in_chans=model_opt['umae']['in_channel'],
