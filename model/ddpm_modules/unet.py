@@ -421,7 +421,7 @@ class UMaskedAutoencoderViT(nn.Module):
         self.skip_projs = nn.ModuleDict({str(i): module for i, module in skip_projs.items()})
         print(f"Using skip connections: {self.skip_idxs}")
         #for now lets just assume that out channel is 3
-        self.final_conv = nn.Conv2d(3, self.in_c, kernel_size=3, stride=1, padding='same') \
+        self.final_conv = nn.Conv2d(self.in_c, 3, kernel_size=3, stride=1, padding='same') \
             if use_final_conv else nn.Identity()
 
         self.initialize_weights()
