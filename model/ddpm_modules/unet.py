@@ -20,6 +20,8 @@ def get_timestep_embedding(timesteps, embedding_dim):
     This matches the implementation in tensor2tensor, but differs slightly
     from the description in Section 3.5 of "Attention Is All You Need".
     """
+    timesteps.squeeze_()
+    print(timesteps.shape)
     assert len(timesteps.shape) == 1
 
     half_dim = embedding_dim // 2
