@@ -6,6 +6,12 @@ from inspect import isfunction
 from timm.models.vision_transformer import PatchEmbed, Block, Mlp
 import  numpy as np
 
+class ZerosLike(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, x):
+        return torch.zeros_like(x)
 def get_timestep_embedding(timesteps, embedding_dim):
     """
     This matches the implementation in Denoising Diffusion Probabilistic Models:
