@@ -5,7 +5,7 @@ import torch.nn as nn
 from torch.nn import init
 from torch.nn import modules
 
-from model.models_umae import UMaskedAutoencoderViT
+from ddpm_modules.unet import UMaskedAutoencoderViT
 
 logger = logging.getLogger('base')
 ####################
