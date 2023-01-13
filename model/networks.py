@@ -5,7 +5,7 @@ import torch.nn as nn
 from torch.nn import init
 from torch.nn import modules
 
-from ddpm_modules.unet import UMaskedAutoencoderViT
+
 
 logger = logging.getLogger('base')
 ####################
@@ -86,9 +86,9 @@ def init_weights(net, init_type='kaiming', scale=1, std=0.02):
 def define_G(opt):
     model_opt = opt['model']
     if model_opt['which_model_G'] == 'ddpm':
-        from .ddpm_modules import diffusion, unet
+        from .ddpm_modules import diffusion, unet,UMaskedAutoencoderViT
     elif model_opt['which_model_G'] == 'sr3':
-        from .sr3_modules import diffusion, unet
+        from .sr3_modules import diffusion, unet,UMaskedAutoencoderViT
     if ('norm_groups' not in model_opt['unet']) or model_opt['unet']['norm_groups'] is None:
         model_opt['unet']['norm_groups']=32
     # model = unet.UNet(
@@ -102,7 +102,7 @@ def define_G(opt):
     #     dropout=model_opt['unet']['dropout'],
     #     image_size=model_opt['diffusion']['image_size']
     # )
-    model=  unet.UMaskedAutoencoderViT(
+    model=  UMaskedAutoencoderViT(
             img_size=model_opt['umae']['img_size'],
             patch_size=model_opt['umae']['patch_size'],
             in_chans=model_opt['umae']['in_channel'],
