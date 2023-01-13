@@ -4,6 +4,9 @@ import torch
 import torch.nn as nn
 from torch.nn import init
 from torch.nn import modules
+
+from model.models_umae import UMaskedAutoencoderViT
+
 logger = logging.getLogger('base')
 ####################
 # initialize
@@ -88,17 +91,34 @@ def define_G(opt):
         from .sr3_modules import diffusion, unet
     if ('norm_groups' not in model_opt['unet']) or model_opt['unet']['norm_groups'] is None:
         model_opt['unet']['norm_groups']=32
-    model = unet.UNet(
-        in_channel=model_opt['unet']['in_channel'],
-        out_channel=model_opt['unet']['out_channel'],
-        norm_groups=model_opt['unet']['norm_groups'],
-        inner_channel=model_opt['unet']['inner_channel'],
-        channel_mults=model_opt['unet']['channel_multiplier'],
-        attn_res=model_opt['unet']['attn_res'],
-        res_blocks=model_opt['unet']['res_blocks'],
-        dropout=model_opt['unet']['dropout'],
-        image_size=model_opt['diffusion']['image_size']
-    )
+    # model = unet.UNet(
+    #     in_channel=model_opt['unet']['in_channel'],
+    #     out_channel=model_opt['unet']['out_channel'],
+    #     norm_groups=model_opt['unet']['norm_groups'],
+    #     inner_channel=model_opt['unet']['inner_channel'],
+    #     channel_mults=model_opt['unet']['channel_multiplier'],
+    #     attn_res=model_opt['unet']['attn_res'],
+    #     res_blocks=model_opt['unet']['res_blocks'],
+    #     dropout=model_opt['unet']['dropout'],
+    #     image_size=model_opt['diffusion']['image_size']
+    # )
+    model=  UMaskedAutoencoderViT(
+            img_size=model_opt['umae']['img_size'],
+            patch_size=model_opt['umae']['patch_size'],
+            in_chans=model_opt['umae']['in_channel'],
+            embed_dim=model_opt['umae']['encoder_embed_dim'],
+            depth=model_opt['umae']['encoder_depth'],
+            num_heads=model_opt['umae']['encoder_num_heads'],
+            decoder_embed_dim=model_opt['umae']['decoder_embed_dim'],
+            decoder_depth=model_opt['umae']['decoder_depth'],
+            decoder_num_heads=model_opt['umae']['decoder_num_heads'],
+            temb_dim=model_opt['umae']['temb_dim'],
+            mlp_ratio=model_opt['umae']['mlp_ratio'],
+            dropout=model_opt['umae']['dropout'],
+            skip_idxs=model_opt['umae']['skip_idxs'],
+            use_add_skip=model_opt['umae']['use_add_skip'],
+            use_final_conv=model_opt['umae']['use_final_conv'],
+        )
     netG = diffusion.GaussianDiffusion(
         model,
         image_size=model_opt['diffusion']['image_size'],
